@@ -32,17 +32,29 @@ void loop(){
   GyX=Wire.read()<<8|Wire.read();  // 0x43 (GYRO_XOUT_H) & 0x44 (GYRO_XOUT_L)
   GyY=Wire.read()<<8|Wire.read();  // 0x45 (GYRO_YOUT_H) & 0x46 (GYRO_YOUT_L)
   GyZ=Wire.read()<<8|Wire.read();  // 0x47 (GYRO_ZOUT_H) & 0x48 (GYRO_ZOUT_L)
-  Serial.print("AcX = "); Serial.print(AcX);
+  /*Serial.print("AcX = "); Serial.print(AcX);
   Serial.print(" | AcY = "); Serial.print(AcY);
   Serial.print(" | AcZ = "); Serial.print(AcZ);
-  Serial.print(" | Tmp = "); Serial.print(Tmp/340.00+36.53);  //equation for temperature in degrees C from datasheet
-  Serial.print(" | GyX = "); Serial.print(GyX);
+  Serial.print(" | Tmp = "); Serial.print(Tmp/340.00+36.53);  //equation for temperature in degrees C from datasheet*/
+ /*Serial.print(" | GyX = "); Serial.print(GyX);
   Serial.print(" | GyY = "); Serial.print(GyY);
-  Serial.print(" | GyZ = "); Serial.println(GyZ);
+  Serial.print(" | GyZ = "); Serial.println(GyZ);*/
   
   int16_t gyroX, gyroZ;
-  int Sensitivity = 300;
+  int Sensitivity = 500;
   gyroX = GyX / Sensitivity / 1.1 * -1;
   gyroZ = GyZ / Sensitivity * -1;
   Mouse.move(gyroZ, gyroX);
+
+  int sensor_value = analogRead(A0);
+  //Serial.println(sensor_value);
+  if(sensor_value <= 150){
+    if(Mouse.isPressed()==0)
+      Mouse.press(MOUSE_LEFT);
+  }
+  else if(sensor_value > 150 && Mouse.isPressed()==1){
+    Mouse.release(MOUSE_LEFT);
+  }
+      
+  delay(10);
 }
