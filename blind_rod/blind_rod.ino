@@ -9,6 +9,7 @@
 
 #define RELAYPIN 3
 #define DHTPIN 4
+#define BUZZERPIN 7
 #define ECHOPIN 12
 #define TRIGPIN 13
 #define DHTTYPE DHT11
@@ -34,7 +35,7 @@ void loop() {
   Serial.print(distance);
   Serial.println("cm");
   if(distance <= 40) {
-    tone(8, 261.63, 500);
+    tone(BUZZERPIN, 261.63, 500);
   }
   
   float t = dht.readTemperature();
