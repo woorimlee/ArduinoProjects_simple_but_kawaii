@@ -20,8 +20,10 @@
 Servo servo;      //Servo 클래스로 servo객체 생성
 bool flag = false;
 int touchSensor = 8;  // 터치센서 핀 설정
-int ledPin = 12;
+int ledPin = 10;
 int buzzerPin = 11;
+int servoPin = 7;
+
 
 SoftwareSerial mySerial(2, 3);
 
@@ -29,7 +31,7 @@ Adafruit_Fingerprint finger = Adafruit_Fingerprint(&mySerial);
 
 void setup()  
 {
-  servo.attach(7);     
+  servo.attach(servoPin);     
   pinMode(touchSensor, INPUT);
   Serial.begin(9600);
   while (!Serial);  // For Yun/Leo/Micro/Zero/...
