@@ -1,31 +1,33 @@
-/************************************************************************
-  < 몸 불편한 사람들을 위한 무선 마우스 >
-  1. 노트북과 레오나르도 hc-06(슬레이브) 연결
-  2. 휨 센서, 6축 자이로(MPU-6050) 센서가 달린 장갑과 우노 hc-06(마스터) 연결
-  3. 자이로 & 휨 센서 역할 : 우노는 센서의 값을 읽어 레오나르도에 값을 전송한다.
-  3-1. 6축 자이로 센서 역할 : 센서 값에따라 레오나르도는 마우스를 움직인다.
-  3-2. 휨 센서 역할 : 센서 값에따라 레오나르도는 마우스를 클릭하는 등의 조작을 한다.
-************************************************************************/
-
+#include <SoftwareSerial.h>
 #include <Wire.h>
-#include <Mouse.h>
+
+#define TX 11
+#define RX 10
+#define SDA A4
+#define SCL A5
+#define INDEXFINGER A0
+#define MIDDLEFINGER A1
+#define RINGFINGER A2
 
 const int MPU_addr = 0x68; // I2C address of the MPU-6050
 int16_t AcX, AcY, AcZ, Tmp, GyX, GyY, GyZ;
 
-void setup() {
+SoftwareSerial mySerial(TX, RX); //tx = 11, rx = 10
+
+void setup()
+{
   Wire.begin();
   Wire.beginTransmission(MPU_addr);
   Wire.write(0x6B);  // PWR_MGMT_1 register
   Wire.write(0);     // set to zero (wakes up the MPU-6050)
   Wire.endTransmission(true);
-  //Serial.begin(9600);
-  Serial.begin(115200);
-  Mouse.begin();
-  Serial.println("Mouse Start!!");
+  Serial.begin(9600);
+  mySerial.begin(9600);
 }
 
-void loop() {
+void loop()
+{
+  //MPU-6050 시작
   Wire.beginTransmission(MPU_addr);
   Wire.write(0x3B);  // starting with register 0x3B (ACCEL_XOUT_H)
   Wire.endTransmission(false);
@@ -40,26 +42,39 @@ void loop() {
   /*Serial.print("AcX = "); Serial.print(AcX);
     Serial.print(" | AcY = "); Serial.print(AcY);
     Serial.print(" | AcZ = "); Serial.print(AcZ);
-    Serial.print(" | Tmp = "); Serial.print(Tmp/340.00+36.53);  //equation for temperature in degrees C from datasheet*/
-  /*Serial.print(" | GyX = "); Serial.print(GyX);
+    Serial.print(" | Tmp = "); Serial.print(Tmp/340.00+36.53);  //equation for temperature in degrees C from datasheet
+    Serial.print(" | GyX = "); Serial.print(GyX);
     Serial.print(" | GyY = "); Serial.print(GyY);
     Serial.print(" | GyZ = "); Serial.println(GyZ);*/
 
-  int16_t gyroX, gyroZ;
+  //마우스 조종을 위해 필요한 값
+  int gyroX, gyroZ;
   int Sensitivity = 500;
   gyroX = GyX / Sensitivity / 1.1 * -1;
   gyroZ = GyZ / Sensitivity * -1;
-  Mouse.move(gyroZ, gyroX);
+  Serial.print(gyroX);
+  Serial.print(", ");
+  Serial.println(gyroZ);
 
-  int sensor_value = analogRead(A0);
-  //Serial.println(sensor_value);
-  if (sensor_value <= 150) {
-    if (Mouse.isPressed() == 0)
-      Mouse.press(MOUSE_LEFT);
-  }
-  else if (sensor_value > 150 && Mouse.isPressed() == 1) {
-    Mouse.release(MOUSE_LEFT);
-  }
+  int fg_i = analogRead(INDEXFINGER); //index finger
+  int fg_m = analogRead(MIDDLEFINGER); //middle finger
+  int fg_r = analogRead(RINGFINGER); //ring finger
+  Serial.print("IDFG : ");
+  Serial.println(fg_i);
+  //송신 규칙 정의
+  //송신할 data : MPU-6050의 값 두 개, 휨 센서 세 개
+  //data type : String
+  //송신할 String : gyroX,gyroZ,fg_i,fg_m,fg_r\n
+  //'\n'을 송신한 문자열의 끝 문자로 정의.
 
+  //hc-06을 통해 String data 송신하기
+  String s_gX = String(gyroX);
+  s_gX += ',' + String(gyroZ);
+  //fg_i
+  //fg_m
+  //fg_r
+  //종료 문자 설정
+  s_gX += '\n';
+  mySerial.print(s_gX);
   delay(10);
 }

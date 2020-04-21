@@ -13,6 +13,11 @@
   Written by Limor Fried/Ladyada for Adafruit Industries.  
   BSD license, all text above must be included in any redistribution
  ****************************************************/
+/****************************************************
+< >
+1.
+
+****************************************************/
 
 
 #include <Adafruit_Fingerprint.h>
@@ -20,9 +25,9 @@
 Servo servo;      //Servo 클래스로 servo객체 생성
 bool flag = false;
 int touchSensor = 8;  // 터치센서 핀 설정
-int ledPin = 10;
+int ledPin = 9;
 int buzzerPin = 11;
-int servoPin = 7;
+int servoPin = 7; //0도에 열고 180도에 닫고
 
 
 SoftwareSerial mySerial(2, 3);
@@ -31,7 +36,8 @@ Adafruit_Fingerprint finger = Adafruit_Fingerprint(&mySerial);
 
 void setup()  
 {
-  servo.attach(servoPin);     
+  servo.attach(servoPin);  
+  servo.write(180);   
   pinMode(touchSensor, INPUT);
   Serial.begin(9600);
   while (!Serial);  // For Yun/Leo/Micro/Zero/...
@@ -56,12 +62,12 @@ void loop()                     // run over and over again
 {  
   getFingerprintIDez();
   if(flag) {
-    servo.write(89);
+    servo.write(1); 
     delay(1000);
   }
   int touchValue = digitalRead(touchSensor);
   if (touchValue == HIGH){
-    servo.write(1);
+    servo.write(179);
     Serial.println("문을 닫습니다.");
     flag = false;
   }
@@ -138,7 +144,7 @@ uint8_t getFingerprintID() {
 int getFingerprintIDez() {
   uint8_t p = finger.getImage();
   if (p != FINGERPRINT_OK)  {
-    Serial.println("11");
+    Serial.println("Waiting");
     return -1;
   }
 
@@ -150,7 +156,7 @@ int getFingerprintIDez() {
 
   p = finger.fingerFastSearch();
   if (p != FINGERPRINT_OK) {
-    Serial.println("33");
+    Serial.println("Denied");
     tone(buzzerPin, 261.63, 500);
     digitalWrite(ledPin, HIGH);
     delay(500);
