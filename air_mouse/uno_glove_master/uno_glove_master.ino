@@ -81,5 +81,5 @@ void loop()
        + String(fg_i) + ',' + String(fg_m) + ',' + String(fg_r) //flex sensor 세 개
        + '\n';                                                  //종료 문자 설정
   mySerial.print(TS);
-  delay(10);
+  delay(5);
 }
