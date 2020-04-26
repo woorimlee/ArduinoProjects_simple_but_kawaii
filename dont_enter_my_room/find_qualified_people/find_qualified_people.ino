@@ -13,22 +13,26 @@
   Written by Limor Fried/Ladyada for Adafruit Industries.  
   BSD license, all text above must be included in any redistribution
  ****************************************************/
-/****************************************************
-< >
-1.
-
-****************************************************/
+ 
+/*****************************************************************************
+<학급 도난 방지를 위한 지문 인식 기반의 출입 잠금 장치>
+1. 미리 학급에 출입해도 되는 학생들의 지문을 등록한다.
+2. 지문 인식 센서를 통해 출입이 허가된 학생들은 서보 모터의 각도를 바꿔 잠금 장치를 연다.
+3. 등록되지 않은 학생의 지문이 인식되면 경고 부저와 LED가 반짝이게 된다.
+*****************************************************************************/
 
 
 #include <Adafruit_Fingerprint.h>
 #include<Servo.h> //Servo 라이브러리를 추가
 Servo servo;      //Servo 클래스로 servo객체 생성
-bool flag = false;
+
+//핀 정의
 int touchSensor = 8;  // 터치센서 핀 설정
 int ledPin = 9;
 int buzzerPin = 11;
 int servoPin = 7; //0도에 열고 180도에 닫고
-
+//서보 모터 각도 조절을 위한 변수
+bool flag = false;
 
 SoftwareSerial mySerial(2, 3);
 
@@ -65,6 +69,10 @@ void loop()                     // run over and over again
     servo.write(1); 
     delay(1000);
   }
+
+  //이미 출입한 학생이 학급안에서 바깥에 있는 잠금 장치를 잠그기 위해 터치 센서를
+  //교실 안쪽에 따로 설치해둠.
+  //터치 센서 동작시 문을 닫음.
   int touchValue = digitalRead(touchSensor);
   if (touchValue == HIGH){
     servo.write(179);
@@ -158,6 +166,7 @@ int getFingerprintIDez() {
   if (p != FINGERPRINT_OK) {
     Serial.println("Denied");
     tone(buzzerPin, 261.63, 500);
+    flag = false;
     digitalWrite(ledPin, HIGH);
     delay(500);
     digitalWrite(ledPin, LOW);

@@ -1,6 +1,16 @@
+/************************************************************************
+  < 몸 불편한 사람들을 위한 무선 마우스 >
+  1. 노트북과 레오나르도 hc-06(슬레이브) 연결
+  2. 휨 센서, 6축 자이로(MPU-6050) 센서가 달린 장갑과 우노 hc-06(마스터) 연결
+  3. 자이로 & 휨 센서 역할 : 우노는 센서의 값을 읽어 레오나르도에 값을 전송한다.
+  3-1. 6축 자이로 센서 역할 : 센서 값에따라 레오나르도는 마우스를 움직인다.
+  3-2. 휨 센서 역할 : 센서 값에따라 레오나르도는 마우스를 클릭하는 등의 조작을 한다.
+************************************************************************/
+
 #include <SoftwareSerial.h>
 #include <Wire.h>
 
+//핀 번호 정의
 #define TX 11
 #define RX 10
 #define SDA A4
@@ -10,8 +20,8 @@
 #define RINGFINGER A2
 
 const int MPU_addr = 0x68; // I2C address of the MPU-6050
-int16_t AcX, AcY, AcZ, Tmp, GyX, GyY, GyZ;
-String TS; // 송신부 데이터
+int16_t AcX, AcY, AcZ, Tmp, GyX, GyY, GyZ; //MPU-6050을 위한 변수
+String TS; // 송신할 데이터
 
 SoftwareSerial mySerial(TX, RX); //tx = 11, rx = 10
 
@@ -61,6 +71,8 @@ void loop()
   int fg_i = analogRead(INDEXFINGER);       //index finger
   int fg_m = analogRead(MIDDLEFINGER) + 10; //middle finger +10은 값 맞춰주려고
   int fg_r = analogRead(RINGFINGER) - 20;   //ring finger +20은 값 맞춰주려고
+  //내 휨 센서 세 개가 조금씩 기본적으로 휘어있는 정도가 달라서 위처럼 값을 수정함.
+  
   Serial.print(", IDFG : ");
   Serial.print(fg_i);
   Serial.print(", MDFG : ");
