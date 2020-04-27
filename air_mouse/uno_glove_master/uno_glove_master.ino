@@ -60,17 +60,17 @@ void loop()
 
   //마우스 조종을 위해 필요한 값
   int gyroX, gyroZ;
-  int Sensitivity = 500;
-  gyroX = GyX / Sensitivity / 1.1 * -1;
-  gyroZ = GyZ / Sensitivity * -1;
+  int Sensitivity = 400;
+  gyroX = GyX / Sensitivity / 1.1; //y축 마우스 이동
+  gyroZ = GyZ / Sensitivity ; //x축 마우스 이동
   Serial.print("GYROX : ");
   Serial.print(gyroX);
   Serial.print(", GYROY : ");
   Serial.print(gyroZ);
 
-  int fg_i = analogRead(INDEXFINGER);       //index finger
-  int fg_m = analogRead(MIDDLEFINGER) + 10; //middle finger +10은 값 맞춰주려고
-  int fg_r = analogRead(RINGFINGER) - 20;   //ring finger +20은 값 맞춰주려고
+  int fg_i = analogRead(INDEXFINGER) - 55;       //index finger
+  int fg_m = analogRead(MIDDLEFINGER); //middle finger 
+  int fg_r = analogRead(RINGFINGER);   //ring finger 
   //내 휨 센서 세 개가 조금씩 기본적으로 휘어있는 정도가 달라서 위처럼 값을 수정함.
   
   Serial.print(", IDFG : ");

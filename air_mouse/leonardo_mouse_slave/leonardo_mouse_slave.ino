@@ -14,6 +14,7 @@ SoftwareSerial mySerial(11, 10);
 String RS; //수신된 문자열
 int gyroX, gyroZ, fg_i, fg_m, fg_r; //마우스 조종에 필요한 변수 선언
 int index1, index2, index3, index4, index5; //쉼표 분리에 필요한 인덱스 변수 선언
+int flex_value = 165;
 
 void setup() {
   Serial.begin(9600);
@@ -61,41 +62,41 @@ void loop() {
     Mouse.move(gyroZ, gyroX);
 
     //왼쪽 버튼 클릭
-    if (fg_i <= 150 && fg_m > 150 && fg_r > 150) {
+    if (fg_i <= flex_value && fg_m > flex_value && fg_r > flex_value) {
       if (Mouse.isPressed() == 0) {
         Mouse.press(MOUSE_LEFT);
       }
     }
-    else if (fg_i > 150 && Mouse.isPressed() == 1) {
+    else if (fg_i > flex_value && Mouse.isPressed() == 1) {
       Mouse.release(MOUSE_LEFT);
     }
     
     //오른쪽 버튼 클릭
-    if (fg_m <= 150 && fg_i > 150 && fg_r > 150) {
+    if (fg_m <= flex_value && fg_i > flex_value && fg_r > flex_value) {
       if (Mouse.isPressed(MOUSE_RIGHT) == 0) {
         Mouse.press(MOUSE_RIGHT);
       }
     }
-    else if (fg_m > 150 && Mouse.isPressed(MOUSE_RIGHT) == 1) {
+    else if (fg_m > flex_value && Mouse.isPressed(MOUSE_RIGHT) == 1) {
       Mouse.release(MOUSE_RIGHT);
     }
 
     //가운데 버튼 클릭
-    if (fg_r <= 150 && fg_i > 150 && fg_m > 150) {
+    if (fg_r <= flex_value && fg_i > flex_value && fg_m > flex_value) {
       if (Mouse.isPressed(MOUSE_MIDDLE) == 0) {
         Mouse.press(MOUSE_MIDDLE);
       }
     }
-    else if (fg_r > 150 && Mouse.isPressed(MOUSE_MIDDLE) == 1) {
+    else if (fg_r > flex_value && Mouse.isPressed(MOUSE_MIDDLE) == 1) {
       Mouse.release(MOUSE_MIDDLE);
     }
 
     //휠은 검지와 중지를 동시에 구부렸을때 
-    if(fg_i <= 150 && fg_m <= 150) {
+    if(fg_i <= flex_value && fg_m <= flex_value) {
       Mouse.move(0, 0, 1);
     }
     //중지와 약지를 구부렸을때 올라가고 내려옴
-    if(fg_m <= 150 && fg_r <= 150) {
+    if(fg_m <= flex_value && fg_r <= flex_value) {
       Mouse.move(0, 0, -1);
     }
     
