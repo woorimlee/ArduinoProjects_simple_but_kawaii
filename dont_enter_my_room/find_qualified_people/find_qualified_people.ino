@@ -170,6 +170,7 @@ int getFingerprintIDez() {
     digitalWrite(ledPin, HIGH);
     delay(500);
     digitalWrite(ledPin, LOW);
+    servo.write(179);
     return -1;
   }
   
