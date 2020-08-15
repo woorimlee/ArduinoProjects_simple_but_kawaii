@@ -1,4 +1,4 @@
-# ArduinoProjects_simple_but_kawaii
+# Projects-simple_but_kawaii
 
 ### 학생들과 함께 만든 귀여운 프로젝트
 
@@ -9,4 +9,7 @@
 * air mouse : 링크 추가 예정
 * [시각 장애인을 위한 장애물 감지 지팡이](https://gist.github.com/woorimlee/254f384b7002e70aa82c2331ff2c8af0) : 초음파 센서와 발열 패드를 이용해 시각 장애인의 생활에 도움을 줄 지팡이. 
 * don't enter my class : 링크 추가 예정
-* kill virus : 링크 추가 예정
+* kill virus : 작업중
+* 숙면 측정 : 작업중
+* 환경 사업 : 작업중
+* KBO 메세지 : 작업중
