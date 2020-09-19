@@ -1,7 +1,6 @@
 # Created by https://www.gitignore.io/api/c++,windows,visualstudio
 # Edit at https://www.gitignore.io/?templates=c++,windows,visualstudio
 
-
 *checkpoints*
 
 *.(Trying)*
@@ -113,6 +112,8 @@ Generated\ Files/
 # NUNIT
 *.VisualState.xml
 TestResult.xml
+
+*kakao*
 
 # Build Results of an ATL Project
 [Dd]ebugPS/
@@ -261,7 +262,6 @@ PublishScripts/
 *.nuget.props
 *.nuget.targets
 
-kakao_token.json
 
 # Microsoft Azure Build Output
 csx/
